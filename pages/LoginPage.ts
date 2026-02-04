@@ -5,6 +5,9 @@ dotenv.config();
 import { Page, Locator } from "@playwright/test";
 
 class LoginPage {
+  loginHeading(loginHeading: any) {
+    throw new Error("Method not implemented.");
+  }
   page: Page;
   usernameInput: Locator;
   usernamePlaceholder: string;
