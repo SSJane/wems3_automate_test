@@ -77,17 +77,19 @@ test.describe("Top Navigation", () => {
     await topNav.expectAdvanceSearchVisible();
   });
 
-  test("TC_TopNav_04: Processes link should be visible", async ({ page }) => {
-    const topNav = new TopNavigationBar(page);
-    await topNav.expectProcessesVisible();
-  });
-
-  test("TC_TopNav_05: User profile menu should be visible", async ({
+  test("TC_TopNav_04: User profile menu should be visible", async ({
     page,
   }) => {
     const topNav = new TopNavigationBar(page);
     await topNav.expectUserProfileMenuVisible();
   });
+
+  test("TC_TopNav_05: Processes link should be visible", async ({ page }) => {
+    const topNav = new TopNavigationBar(page);
+    await topNav.expectProcessesVisible();
+  });
+
+  
 
   test("TC_TopNav_06: Sidebar toggle should open/close sidebar", async ({
     page,
