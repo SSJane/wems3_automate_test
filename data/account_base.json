@@ -1,0 +1,93 @@
+{
+  "roles": [
+    {
+      "name": "AdminAutoTest",
+      "accessLevel": "All Data"
+    },
+    {
+      "name": "UserAutoTest",
+      "accessLevel": "Group and My Data"
+    },
+    {
+      "name": "DeviceAutoTest",
+      "accessLevel": "My Data"
+    }
+  ],
+  "groups": [
+    {
+      "name": "Device Automate test",
+      "permission": {
+        "modules": [
+          "Dashboard",
+          "Files",
+          "Help",
+          "About us"
+        ]
+      }
+    },
+    {
+      "name": "Department Automate test",
+      "permission": {
+        "modules": [
+          "Dashboard",
+          "Files",
+          "Cameras",
+          "Asset Archive",
+          "Recycle Bin",
+          "Retention",
+          "Help",
+          "Crime Map",
+          "About us"
+        ]
+      }
+    },
+    {
+      "name": "System Admin AutomateTest",
+      "permission": {
+        "modules": [
+          "Dashboard",
+          "Files",
+          "Cameras",
+          "Asset Archive",
+          "Retention",
+          "Recycle Bin",
+          "Access Control",
+          "Settings",
+          "Security",
+          "Analytics",
+          "Help",
+          "Maintenance",
+          "Downloads",
+          "Crime Map",
+          "About us"
+        ]
+      }
+    }
+  ],
+  "users": [
+    {
+      "id": "User1",
+      "username": "AdminAutoTest",
+      "password": "Wolfcom_5910",
+      "email": "adminautotest@wolfcomglobal.com",
+      "role": "AdminAutoTest",
+      "group": "System Admin AutomateTest"
+    },
+    {
+      "id": "User2",
+      "username": "UserAutoTest",
+      "password": "Wolfcom_5910",
+      "email": "userautotest@wolfcomglobal.com",
+      "role": "UserAutoTest",
+      "group": "Department Automate test"
+    },
+    {
+      "id": "User3",
+      "username": "DeviceAutoTest",
+      "password": "Wolfcom_5910",
+      "email": "DeviceAutoTest@wolfcomglobal.com",
+      "role": "DeviceAutoTest",
+      "group": "Device Automate test"
+    }
+  ]
+}

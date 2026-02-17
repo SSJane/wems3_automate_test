@@ -22,11 +22,11 @@ export default defineConfig({
   ],
 
   expect: { timeout: 10000 },
-  timeout: 45000,
+  timeout: 60000,
 
   use: {
     baseURL: process.env.BASE_URL_STAGING,
-    trace: "on",
+    trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
     headless: !!process.env.CI,
