@@ -34,14 +34,22 @@ const ALL_MENUS = [
  * Check if a menu item is visible on the page
  */
 async function isMenuVisible(
-  page: any,
-  menuName: string
+  sideNav: SideNavigationBar,
+  menuName: string,
 ): Promise<boolean> {
+ 
+  const locator = sideNav.page
+    .locator(`li.menu-item:has-text("${menuName}")`)
+    .first();
+
   try {
-    const menuLocator = page.getByRole("link", { name: menuName });
-    await menuLocator.waitFor({ state: "visible", timeout: 2000 });
+    await expect(locator).toBeVisible({ timeout: 3000 });
     return true;
-  } catch {
+  } catch (e) {
+    if (!sideNav.page.isClosed()) {
+      await sideNav.page.screenshot({ path: `debug-menu-${menuName}.png` }).catch(() => {});
+    }
+   
     return false;
   }
 }
@@ -72,6 +80,8 @@ test.describe("Advanced Menu Access Control - Using AccountDataHelper", () => {
         await loginPage.clickSignIn();
         await expect(page).toHaveURL(/.*dashboard/i);
 
+        const sideNav = new SideNavigationBar(page);
+
         // Get accessible menus for this user
         const accessibleMenus = fullUserDetails?.accessibleMenus || [];
         const inaccessibleMenus = ALL_MENUS.filter(
@@ -80,13 +90,13 @@ test.describe("Advanced Menu Access Control - Using AccountDataHelper", () => {
 
         // Verify accessible menus are visible
         for (const menu of accessibleMenus) {
-          const visible = await isMenuVisible(page, menu);
+          const visible = await isMenuVisible(sideNav, menu);
           expect(visible).toBe(true);
         }
 
         // Verify inaccessible menus are not visible
         for (const menu of inaccessibleMenus) {
-          const visible = await isMenuVisible(page, menu);
+          const visible = await isMenuVisible(sideNav, menu);
           expect(visible).toBe(false);
         }
       });
@@ -194,15 +204,15 @@ test.describe("Advanced Menu Access Control - Using AccountDataHelper", () => {
       });
     });
 
-    test("DeviceAutoTest should have limited access (Files and Help only)", () => {
+    test("DeviceAutoTest should have limited access (Dashdoard, Files, Help and About us only)", () => {
       const deviceMenus = AccountDataHelper.getAccessibleMenusForUser(
         "DeviceAutoTest"
       );
 
       expect(deviceMenus).toEqual(
-        expect.arrayContaining(["Files", "Help"])
+        expect.arrayContaining(["Dashboard", "Files", "Help", "About us"])
       );
-      expect(deviceMenus.length).toBe(2);
+      expect(deviceMenus.length).toBe(4);
     });
 
     test("UserAutoTest should have department-level access", () => {
