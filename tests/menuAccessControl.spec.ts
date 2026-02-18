@@ -169,7 +169,7 @@ test.describe("Menu Access Control - Based on account_base.json", () => {
       expect(group?.permission.modules).toEqual(["Dashboard", "Files", "Help", "About us"]);
     });
 
-    test("TC_GroupPerm_02: Department Automate test - Should have 8 modules", () => {
+    test("TC_GroupPerm_02: Department Automate test - Should have 9 modules", () => {
       const group = getGroupByName("Department Automate test");
       expect(group?.permission.modules).toHaveLength(9);
       expect(group?.permission.modules).toEqual(

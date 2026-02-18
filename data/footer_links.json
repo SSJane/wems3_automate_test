@@ -1,0 +1,15 @@
+
+{
+  "companyName": "Wolfcom Enterprises",
+  "websiteLink": "http://www.wolfcomusa.com/",
+  "socialMedia": [
+    {
+      "name": "Facebook",
+      "link": "https://www.facebook.com/WolfcomUSA/"
+    },
+    {
+      "name": "Twitter",
+      "link": "https://twitter.com/wolfcom_usa/"
+    }
+  ]
+}
