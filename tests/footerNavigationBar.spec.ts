@@ -2,14 +2,12 @@ import { expect, test } from "@playwright/test";
 import { LoginPage } from "../pages/LoginPage";
 import { FooterNavigationBar } from "../pages/FooterNavigationBar";
 import * as dotenv from "dotenv";
-import footerLinksData from "../data/footer_links.json";
 dotenv.config();
 
 // ---- Data -----
 const BASE = process.env.BASE_URL_STAGING || "http://192.168.1.252";
 const USERNAME = process.env.TEST_USERNAME || "wolfcom";
 const PASSWORD = process.env.TEST_PASSWORD || "Wolfcom_5910";
-const WEBSITELINK = footerLinksData.websiteLink;
 
 // ---- Test Case ----
 test.beforeAll(() => {

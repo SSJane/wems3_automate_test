@@ -11,24 +11,7 @@ const T = {
   WRONG_PASSWORD: "Incorrect username or password.",
 };
 
-// Attemps login and returns whether a modal with given text appeared
-async function loginAndDetectModal(
-  page: { getByRole: (arg0: string, arg1: { name: any }) => any },
-  loginPage: { login: (arg0: any, arg1: any) => any },
-  modalRegex: any,
-  username: any,
-  password: any,
-) {
-  await loginPage.login(username, password);
-  const modal = page.getByRole("dialog", { name: modalRegex });
-  try {
-    await modal.first().waitFor({ state: "visible", timeout: 3000 });
-    return true;
-  } catch (error) {
-    console.error("Modal wait failed:", error);
-    return false;
-  }
-}
+
 
 // ---- Data -----
 const BASE = process.env.BASE_URL_STAGING || "http://192.168.1.252";

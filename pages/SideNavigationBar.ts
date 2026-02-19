@@ -133,11 +133,39 @@ class SideNavigationBar {
   async clickDashboardMenu() {
     await this.dashboardMenu.click();
   }
-
+  // Files Menu
   async clickFilesMenu() {
     await this.filesMenu.click();
   }
-
+  // Submenus under Files
+  async clickMyCasesMenu() {
+    await this.myCasesMenu.click();
+  }
+  async clickMyFavoritesMenu() {
+    await this.myFavoritesMenu.click();
+  }
+  async clickMyBookmarksMenu() {
+    await this.myBookmarksMenu.click();
+  }
+  async clickMyPhotosMenu() {
+    await this.myPhotosMenu.click();
+  }
+  async clickMyVideosMenu() {
+    await this.myVideosMenu.click();
+  }
+  async clickMyAudioMenu() {
+    await this.myAudioMenu.click();
+  }
+  async clickMyDocumentsMenu() {
+    await this.myDocumentsMenu.click();
+  }
+  async clickAllFilesMenu() {
+    await this.allFilesMenu.click();
+  }
+  async clickSharedFilesMenu() {
+    await this.sharedFilesMenu.click();
+  }
+  // Cameras Menu
   async clickCamerasMenu() {
     await this.camerasMenu.click();
   }

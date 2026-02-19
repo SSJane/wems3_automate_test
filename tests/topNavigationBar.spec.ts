@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { TopNavigationBar } from "../pages/TopNavigationBar";
 import { LoginPage } from "../pages/LoginPage";
 import * as dotenv from "dotenv";
-import { expectNoConsoleErrors } from "../utils/consloeErrors";
+import { expectNoConsoleErrors } from "../utils/consoleErrors";
 dotenv.config();
 
 // ---- Data -----

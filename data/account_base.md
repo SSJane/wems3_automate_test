@@ -1,4 +1,5 @@
 Roles
+
 - AdminAutoTest
     Access Level
         - All Data
@@ -10,6 +11,7 @@ Roles
         - My Data
 
 Groups
+
 - Device Automate test
     Permission
         - Modules
@@ -44,24 +46,26 @@ Groups
             - Downloads
             - Crime Map
 
-
 User1:
+
 - Username: AdminAutoTest
 - Password: Wolfcom_5910
-- Email: adminautotest@wolfcomglobal.com
+- Email: <adminautotest@wolfcomglobal.com>
 - Role: AdminAutoTest
 - Group: System Admin AutomateTest
 
 User2:
+
 - Username: UserAutoTest
 - Password: Wolfcom_5910
-- Email: userautotest@wolfcomglobal.com
+- Email: <userautotest@wolfcomglobal.com>
 - Role: UserAutoTest
 - Group: Department Automate test
 
 User3:
+
 - Username: DeviceAutoTest
 - Password: Wolfcom_5910
-- Email: DeviceAutoTest@wolfcomglobal.com
+- Email: <DeviceAutoTest@wolfcomglobal.com>
 - Role: DeviceAutoTest
 - Group: Device Automate test

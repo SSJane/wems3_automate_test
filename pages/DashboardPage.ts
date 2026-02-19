@@ -43,9 +43,9 @@ class DashboardPage {
       name: /My Cases/i,
     });
 
-    this.headerMyPhotos = page.getByRole("heading", { name: /My Photos/i });
-    this.headerMyVideos = page.getByRole("heading", { name: /My Videos/i });
-    this.headerAllFiles = page.getByRole("heading", { name: /All Files/i });
+    this.headerMyPhotos = myCasesHeaderSection.getByRole("heading", { name: /My Photos/i });
+    this.headerMyVideos = myCasesHeaderSection.getByRole("heading", { name: /My Videos/i });
+    this.headerAllFiles = myCasesHeaderSection.getByRole("heading", { name: /All Files/i });
   }
 
   async clickMyCases() {
