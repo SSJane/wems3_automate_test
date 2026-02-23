@@ -17,9 +17,9 @@
 
 ## Case Notes
 
-- List, add, edit, delete (single & bulk)
-- Print single note; Print Case Report
-- Count on Case Notes button, sorting, quick-search, pagination, empty state, loading overlay, error toasts [ALL WEMS 3...QA Report | Excel]
+- :white_check_mark: List, add, edit, delete (single & bulk)
+- :white_check_mark: Print single note; Print Case Report
+- :white_check_mark: Count on Case Notes button, sorting, quick-search, pagination, empty state, loading overlay, error toasts.
 
 ## Case actions
 
