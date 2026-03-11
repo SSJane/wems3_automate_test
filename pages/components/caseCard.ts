@@ -8,6 +8,7 @@ export class CaseCard {
   totalItems: Locator;
   manage: { print: Locator; edit: Locator; delete: Locator };
   icons: { folderNormal: Locator; folderShared: Locator; folderLock: Locator };
+  static manage: any;
 
   constructor(page: Page, root: Locator) {
     this.page = page;
@@ -34,24 +35,24 @@ export class CaseCard {
   }
 
   // Click to open case
-  async clickCase() {
+  async clickCaseCaseCard() {
     await this.root.click();
   }
   // Click print icon
-  async clickPrint() {
+  async clickPrintCaseCard() {
     await this.manage.print.click();
   }
   // Click edit icon
-  async clickEdit() {
+  async clickEditCaseCard() {
     await this.manage.edit.click();
   }
   // Click delete icon
-  async clickDelete() {
+  async clickDeleteCaseCard() {
     await this.manage.delete.click();
   }
 
   // Get case title
-  async getTitle(): Promise<string> {
+  async getTitleCaseCard(): Promise<string> {
     return (await this.title.textContent())?.trim() ?? "";
   }
   // Get case decription

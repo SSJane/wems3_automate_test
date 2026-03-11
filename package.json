@@ -10,7 +10,8 @@
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
     "test:debug": "npx playwright test --debug",
-    "codegen": "npx playwright codegen"
+    "codegen": "npx playwright codegen",
+    "test:report": "npx playwright test --reporter=html --reporter=dot"
   },
   "keywords": [],
   "author": "",

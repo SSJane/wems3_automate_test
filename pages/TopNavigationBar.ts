@@ -32,6 +32,10 @@ class TopNavigationBar {
   searchResultsRows: Locator;
   searchResultsCount: Locator;
   totalResults: Locator;
+  deleteIconAction: Locator;
+  deleteConfirmDialog: any;
+  btnYes: any;
+  btnNo: any;
 
   constructor(page: Page) {
     this.page = page;
@@ -92,6 +96,24 @@ class TopNavigationBar {
 
     this.searchResultsCount = page.locator(".total-results, [class*='total']");
     this.totalResults = page.getByRole("heading", { name: "Total Results" });
+    this.deleteIconAction = page.locator('a[title="Delete"]');
+
+    // Popup elements
+    // Dialog root
+    const deleteConfirmDialog = page.locator("ngx-dialog-confirmation").filter({
+      has: page.locator("nb-card-header", { hasText: /Delete Confirmation/i }),
+    });
+    this.deleteConfirmDialog = deleteConfirmDialog.locator("nb-card-header", {
+      hasText: /Delete Confirmation/i,
+    });
+
+    // Buttons (scoped)
+    this.btnYes = deleteConfirmDialog.getByRole("button", {
+      name: /^\s*Yes\s*$/i,
+    });
+    this.btnNo = deleteConfirmDialog.getByRole("button", {
+      name: /^\s*No\s*$/i,
+    });
   }
 
   // ---- Top Navigation Methods ----
@@ -354,6 +376,12 @@ class TopNavigationBar {
   // Search Results Methods
   async waitForSearchResultsToLoad() {
     await this.totalResults.waitFor({ state: "visible", timeout: 10000 });
+  }
+
+  // Deleted results from search first results table and click Yes
+  async clickDeleteSearchFirstResult() {
+    await this.deleteIconAction.click();
+    await this.btnYes.click();
   }
 
   async getSearchResultsCount(): Promise<number> {
