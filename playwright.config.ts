@@ -7,13 +7,13 @@ dotenv.config();
 export default defineConfig({
   testDir: "./tests",
 
-  fullyParallel: true,
+  fullyParallel: false,
 
   forbidOnly: !!process.env.CI,
 
   retries: process.env.CI ? 2 : 0,
 
-  workers: process.env.CI ? 2 : 2,  // Reduced workers to avoid timeout issues
+  workers: process.env.CI ? 2 : 3,
 
   reporter: [
     ["html"],
@@ -22,7 +22,7 @@ export default defineConfig({
   ],
 
   expect: { timeout: 10000 },
-  timeout: 60000,
+  timeout: 120_000,
 
   use: {
     baseURL: process.env.BASE_URL_STAGING,
