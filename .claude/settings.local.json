@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(ls *.json tsconfig*)",
+      "Bash(find . -name tsconfig*.json -maxdepth 3)"
+    ]
+  }
+}

@@ -93,6 +93,39 @@ export class MyCasesPage {
   createCaseNoteSuccessToast: Locator;
   btnBackToMyCases: Locator;
 
+  // TC-Flow-C-06: Required Field Validation on Edit Metadata
+  inputTitleAlertMetadata: Locator;
+
+  // TC-Flow-C-07: Bulk Update Metadata via More Actions
+  btnMoreActionsCaseFile: Locator;
+  btnUpdateMetadataBulkMenu: Locator;
+  btnSelectAllCaseFiles: Locator;
+  btnDeleteAllCaseFiles: Locator;
+  // Bulk Update Metadata dialog (ngx-dialog-update-metadata) — scoped locators
+  textHeaderBulkUpdateMetadata: Locator;
+  titleInputBulkMetadata: Locator;
+  classificationButtonBulkMetadata: Locator;
+  caseIdButtonBulkMetadata: Locator;
+  caseIdDropdownBulkMetadata: Locator;
+  descriptionInputBulkMetadata: Locator;
+  btnSubmitBulkMetadata: Locator;
+
+  // TC-Flow-C-08 / C-09: Download (single & bulk)
+  btnDownloadCaseFiles: Locator;
+  dialogBulkDownload: Locator;
+  dialogBulkDownloadTitle: Locator;
+  dialogBulkDownloadMessage: Locator;
+  dialogBulkDownloadFileCount: Locator;
+  checkboxFileMetadata: Locator;
+  checkboxAuditReport: Locator;
+  btnConfirmBulkDownload: Locator;
+  btnCancelBulkDownload: Locator;
+  successToastDownload: Locator;
+
+  // TC-Flow-C-10 / C-11: Remove single & bulk files
+  successToastFileRemoved: Locator;
+  deleteFileAction: Locator;
+
   constructor(page: Page) {
     this.page = page;
     // sub menu my cases
@@ -346,6 +379,96 @@ export class MyCasesPage {
           .nth(5)
           .filter({ hasText: new RegExp(`^\\s*${title}\\s*$`) }),
       });
+
+    // TC-Flow-C-06: Title required alert on Edit Metadata form
+    this.inputTitleAlertMetadata = page
+      .locator(".alert, .invalid-feedback, [class*='error']")
+      .filter({ hasText: /title is required/i })
+      .first();
+
+    // TC-Flow-C-07: Bulk Update Metadata via More Actions
+    // More Actions button inside the case files area (the toolbar/header of the table)
+    this.btnMoreActionsCaseFile = page.locator("#MoreActionsMenu");
+    this.btnUpdateMetadataBulkMenu = page
+      .locator(".dropdown-item, nb-menu-item, [role='menuitem'], a, button")
+      .filter({ hasText: /^Update Metadata$/i })
+      .first();
+    this.btnSelectAllCaseFiles = page.getByText("Select All", { exact: true });
+    this.btnDeleteAllCaseFiles = page.getByTitle("Delete All");
+
+    // Bulk Update Metadata dialog — scoped to ngx-dialog-update-metadata
+    const bulkUpdateDialog = page.locator("ngx-dialog-update-metadata");
+    this.textHeaderBulkUpdateMetadata = bulkUpdateDialog.locator(
+      "nb-card-header",
+      {
+        hasText: /update metadata/i,
+      },
+    );
+    this.titleInputBulkMetadata = bulkUpdateDialog.locator("#title");
+    this.classificationButtonBulkMetadata = bulkUpdateDialog.locator(
+      "nb-select[name='classification'] button.select-button",
+    );
+    this.caseIdButtonBulkMetadata = bulkUpdateDialog.locator(
+      "nb-select[name='caseId'] button.select-button",
+    );
+    this.caseIdDropdownBulkMetadata = bulkUpdateDialog.locator(
+      "nb-select[name='caseId']",
+    );
+    this.descriptionInputBulkMetadata =
+      bulkUpdateDialog.locator("#description");
+    this.btnSubmitBulkMetadata = bulkUpdateDialog.getByRole("button", {
+      name: /^Submit$/i,
+    });
+
+    // TC-Flow-C-08 / C-09: Bulk Download dialog
+    this.btnDownloadCaseFiles = page
+      .locator('button[title="Download"]')
+      .first();
+
+    const bulkDownloadOverlay = page
+      .locator(".cdk-overlay-pane")
+      .filter({ hasText: /bulk download/i })
+      .last();
+    this.dialogBulkDownload = bulkDownloadOverlay;
+    this.dialogBulkDownloadTitle =
+      bulkDownloadOverlay.getByText(/^Bulk Download$/i);
+    this.dialogBulkDownloadMessage = bulkDownloadOverlay.getByText(
+      /bundled and downloaded as a single.*zip/i,
+    );
+    this.dialogBulkDownloadFileCount = bulkDownloadOverlay
+      .locator("p")
+      .filter({ hasText: /No\.\s*of\s*files/i });
+    this.checkboxFileMetadata = bulkDownloadOverlay.locator(
+      "nb-checkbox#file_metadata label.label",
+    );
+
+    this.checkboxAuditReport = bulkDownloadOverlay.locator(
+      "nb-checkbox#audit_report label.label",
+    );
+
+    this.btnConfirmBulkDownload = bulkDownloadOverlay.getByRole("button", {
+      name: /^Download$/i,
+    });
+    this.btnCancelBulkDownload = bulkDownloadOverlay.getByRole("button", {
+      name: /^Cancel$/i,
+    });
+    this.successToastDownload = page
+      .locator(
+        '[role="alertdialog"], .toast-message, .toast-success, .ngx-toastr',
+      )
+      .filter({ hasText: /file will begin to download shortly/i })
+      .first();
+
+    // TC-Flow-C-10 / C-11: Remove file
+    this.successToastFileRemoved = page
+      .locator(
+        '[role="alertdialog"], .toast-message, .toast-success, .ngx-toastr',
+      )
+      .filter({ hasText: /case file.*removed successfully/i })
+      .first();
+    this.deleteFileAction = page.locator(
+      "ng2-smart-table-cell a[title='Delete']",
+    );
 
     // - Edit metadata element -
     // page header
@@ -734,5 +857,139 @@ export class MyCasesPage {
       classificationCell,
       `Classification "${classification}" should not appear for title "${title}"`,
     ).toHaveCount(0);
+  }
+
+  // ---- New helpers for TC-Flow-C-06 through C-11 ----
+
+  /**
+   * Helper: upload valid files to a case if none are present yet.
+   * Navigates into the case (by caseID) from the My Cases list,
+   * uploads the given files, waits for completion, and stays on the
+   * case detail page.
+   */
+  async ensureFilesInCase(
+    caseID: string,
+    validFilesUpload: string[],
+  ): Promise<void> {
+    await this.searchCase(caseID);
+    const caseCard = this.myCaseCards.filter({ hasText: caseID }).first();
+    await expect(caseCard).toBeVisible();
+
+    const totalItemsText = await this.totalItems.textContent();
+    const totalItemsCount = totalItemsText ? parseInt(totalItemsText) : 0;
+
+    if (totalItemsCount === 0) {
+      await this.clickCaseByCaseID(caseID);
+      await this.expectOpenCaseDetailPage(caseID);
+      await this.clickUploadButton();
+      await expect(this.textHeaderUpload).toBeVisible();
+
+      const { uploadToCase } = await import("../../utils/uploadMultiple");
+      await uploadToCase(this.page, validFilesUpload, {
+        scope: this.page.locator(".upload-to-case-dialog"),
+        input: 'input[type="file"]',
+        browseLink: this.page.getByRole("link", { name: /Click to browse/i }),
+        dropzone: this.page.getByText(/Drag & Drop files here/i).locator(".."),
+      });
+      await this.uploadButton.click();
+      await this.waitForUploadToFinish();
+      await expect(this.successToastUploaded).toBeVisible({ timeout: 10000 });
+      await this.expectOpenCaseDetailPage(caseID);
+    } else {
+      await this.clickCaseByCaseID(caseID);
+      await this.expectOpenCaseDetailPage(caseID);
+    }
+  }
+
+  /**
+   * Open More Actions menu and click a named menu item.
+   */
+  async clickMoreActionsItem(itemText: string): Promise<void> {
+    await this.btnMoreActionsCaseFile.click();
+    const menuItem = this.page
+      .locator(
+        ".dropdown-item, nb-menu-item, [role='menuitem'], .context-menu-item, a, button",
+      )
+      .filter({ hasText: new RegExp(`^\\s*${itemText}\\s*$`, "i") })
+      .first();
+    await menuItem.waitFor({ state: "visible", timeout: 8000 });
+    await menuItem.click();
+  }
+
+  /**
+   * Select classification inside the Bulk Update Metadata dialog.
+   */
+  async selectClassificationBulkMetadata(
+    classificationName: string,
+  ): Promise<void> {
+    await this.classificationButtonBulkMetadata.click();
+    const overlay = this.page
+      .locator(".cdk-overlay-pane:has(nb-option-list)")
+      .last();
+    await overlay.waitFor({ state: "visible", timeout: 10000 });
+    const option = overlay
+      .locator("nb-option")
+      .filter({
+        hasText: new RegExp(`^\s*${escapeRegex(classificationName)}\s*$`, "i"),
+      })
+      .first();
+    await expect(option).toBeVisible({ timeout: 5000 });
+    await option.click();
+  }
+
+  /**
+   * Select Case ID inside the Bulk Update Metadata dialog.
+   */
+  async selectCaseIDBulk(caseId: string): Promise<void> {
+    await this.caseIdButtonBulkMetadata.click();
+    const overlay = this.page
+      .locator(".cdk-overlay-pane:has(nb-option-list)")
+      .last();
+    await overlay.waitFor({ state: "visible", timeout: 10000 });
+    const option = overlay
+      .locator("nb-option")
+      .filter({
+        hasText: new RegExp(`^\s*${escapeRegex(caseId)}\s*$`),
+      })
+      .first();
+    await option.scrollIntoViewIfNeeded();
+    await expect(option).toBeVisible({ timeout: 5000 });
+    await option.click();
+  }
+
+  /**
+   * Bulk update metadata: scoped to ngx-dialog-update-metadata ("Update Metadata" dialog).
+   */
+  async editMetadataBulk(
+    title: string,
+    classification: string,
+    caseID: string,
+    description: string,
+  ): Promise<void> {
+    // Wait for the "Update Metadata" dialog (not the single-file "Edit Metadata" page)
+    await expect(this.textHeaderBulkUpdateMetadata).toBeVisible({
+      timeout: 10000,
+    });
+    await this.titleInputBulkMetadata.fill(title);
+    await this.selectClassificationBulkMetadata(classification);
+    await expect(this.classificationButtonBulkMetadata).toHaveText(
+      classification,
+      { timeout: 5000 },
+    );
+    await this.selectCaseIDBulk(caseID);
+    await expect(this.caseIdDropdownBulkMetadata).toHaveText(caseID, {
+      timeout: 5000,
+    });
+    await this.descriptionInputBulkMetadata.fill(description);
+    await this.btnSubmitBulkMetadata.click();
+  }
+
+  /**
+   * Get the file count shown on a case card for the given caseID.
+   */
+  async getCaseFileCount(caseID: string): Promise<number> {
+    await this.searchCase(caseID);
+    const totalItemsText = await this.totalItems.textContent();
+    return totalItemsText ? parseInt(totalItemsText) : 0;
   }
 }
